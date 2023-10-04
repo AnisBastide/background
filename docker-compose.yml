@@ -1,6 +1,6 @@
 services:
   api:
-    build: ..
+    build: .
     env_file:
       - .env
     volumes:
@@ -30,3 +30,5 @@ services:
 
 volumes:
   postgres-data: {}
+
+
