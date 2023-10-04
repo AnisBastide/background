@@ -1,0 +1,22 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-arm64-openssl-1.1.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model backgroundImage {
+  id     Int    @id @default(autoincrement())
+  link   String
+  width  Int    @db.SmallInt
+  height Int    @db.SmallInt
+}
+
+model treasures {
+  id    Int    @id @default(autoincrement())
+  image String
+  score Int
+}
