@@ -1,0 +1,9 @@
+dependencies:
+- name: adminer
+  repository: https://cetic.github.io/helm-charts
+  version: 0.2.1
+- name: postgresql
+  repository: oci://registry-1.docker.io/bitnamicharts
+  version: 13.0.0
+digest: sha256:af6a2f02b0271f9a0e8f12a7099cf23b548e70f93fec08b82b73eb5297457686
+generated: "2023-10-04T15:40:37.052544+02:00"
