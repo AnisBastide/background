@@ -1,0 +1,18 @@
+{{ if .Values.deployment.backend }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: {{ .Values.env }}-backend
+  name: {{ .Values.env }}-backend-service
+spec:
+  selector:
+    app: {{ .Values.env }}-backend
+  ports:
+    - protocol: TCP
+      port: {{ .Values.background.backend.port }}
+      targetPort: 8080
+  type: LoadBalancer
+---
+{{ end }}

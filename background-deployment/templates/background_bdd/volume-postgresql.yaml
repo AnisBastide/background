@@ -1,0 +1,16 @@
+{{ if .Values.deployment.backend }}
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ .Values.env }}-postgresql-pvc
+  labels:
+    app: {{ .Values.env }}-postgresql
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.background.postgresql.storage }}
+---
+{{ end }}

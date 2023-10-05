@@ -1,0 +1,34 @@
+{{ if .Values.deployment.backend }}
+---
+apiVersion: v1
+kind: Deployment
+metadata:
+  name: {{ .Values.env }}-backend-deployment
+  labels:
+    app: {{ .Values.env }}-backend
+spec:
+  replicas: {{ .Values.background.backend.replica }}
+  selector:
+    matchLabels:
+      app: {{ .Values.env }}-backend
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.env }}-backend
+    spec:
+      initContainers:
+        - name: {{ .Values.env }}-wait-bdd
+          image: appropriate/curl:latest
+          command: [ 'sh', '-c', 'until curl -s http://{{ .Values.env }}-postgresql-service:5432; waiting for database OK response ...; sleep 2; done;' ]
+      containers:
+        - name: {{ .Values.env }}-backend
+          image: {{ .Values.background.backend.repository }}
+          imagePullPolicy: {{ .Values.background.backend.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.background.backend.port }}
+          envFrom:
+            - secretRef:
+              name: {{ .Values.env }}-postgresql-secret
+
+---
+{{ end }}

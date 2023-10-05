@@ -1,0 +1,10 @@
+{{ if .Values.deployment.frontend }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.env }}-frontend-configmap
+data:
+  APIBASEURL: "http://{{ .Values.env }}-backend-service:8080/"
+---
+{{ end }}

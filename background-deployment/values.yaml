@@ -1,0 +1,28 @@
+env: dev
+
+deployment:
+  frontend: false
+  backend: true
+
+background:
+  frontend:
+    image: anisbastide/background_front
+    pullPolicy: Always
+    port: 80
+    replica: 1
+  backend:
+    image: anisbastide/background_front
+    pullPolicy: Always
+    port: 3000
+    replica: 3
+  postgresql:
+    image: postgres:16-alpine
+    pullPolicy: Always
+    storage: 512Mi
+    port: 5432
+    replica: 1
+
+route:
+  domain: domain.name.temp.fr
+
+imagePullSecrets: []
