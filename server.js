@@ -48,6 +48,25 @@ app.post('/background', async (req, res) => {
     }
 });
 
+app.post('/treasure', async (req, res) => {
+    try {
+        console.log(req.body);
+        const { image, score } = req.body;
+
+        const newTreasure = await prisma.treasures.create({
+            data: {
+                image,
+                score
+            },
+        });
+
+        res.status(201).json(newTreasure);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Une erreur est survenue lors de la création du treasure.' });
+    }
+});
+
 app.delete('/background/:id', async (req, res) => {
     const { id } = req.params;
 
