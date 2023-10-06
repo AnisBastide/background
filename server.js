@@ -7,6 +7,7 @@ const port = 3000
 
 const prisma = new PrismaClient()
 
+
 const swaggerOptions = {
     swaggerDefinition: {
         info: {
@@ -20,6 +21,10 @@ const swaggerOptions = {
 };
 const swaggerSpec = swaggerJSDoc(swaggerOptions);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+app.use(express.json());
+
+
 function getRandomInt(max) {
     return Math.floor(Math.random() * max);
 }
@@ -48,7 +53,55 @@ app.get('/background', async (req, res) => {
         treasures:treasures
     }
     res.send(response)
-})
+});
+
+app.post('/background', async (req, res) => {
+    try {
+        console.log(req.body);
+        const { link, width, height } = req.body;
+
+        const newBackground = await prisma.backgroundImage.create({
+            data: {
+                link,
+                width,
+                height,
+            },
+        });
+
+        res.status(201).json(newBackground);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Une erreur est survenue lors de la création du background image.' });
+    }
+});
+
+app.delete('/background/:id', async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const background = await prisma.backgroundImage.findUnique({
+            where: {
+                id: parseInt(id),
+            },
+        });
+
+        if (!background) {
+            return res.status(404).json({ error: 'Background image non trouvé.' });
+        }
+
+        await prisma.backgroundImage.delete({
+            where: {
+                id: parseInt(id),
+            },
+        });
+
+        res.status(204).send();
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Une erreur est survenue lors de la suppression du background image.' });
+    }
+});
+
 
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
