@@ -1,11 +1,13 @@
 FROM node:16
 
-WORKDIR /back
+WORKDIR /app
 
 COPY ["package.json", "package-lock.json*", "./"]
 
 RUN npm install
 
-COPY back/.. .
+COPY . .
+
+RUN npx prisma generate
 
 CMD ["npm", "start"]

@@ -1,0 +1,17 @@
+{{ if .Values.deployment.frontend }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: {{ .Values.env }}-frontend
+  name: {{ .Values.env }}-frontend-service
+spec:
+  selector:
+    app: {{ .Values.env }}-frontend
+  ports:
+    - protocol: TCP
+      port: {{ .Values.background.frontend.port }}
+      targetPort: 8080
+---
+{{ end }}

@@ -1,3 +1,5 @@
+const swaggerJSDoc = require('swagger-jsdoc');
+const swaggerUi = require('swagger-ui-express');
 const express = require('express')
 const {PrismaClient} = require("@prisma/client");
 const app = express()
@@ -5,7 +7,23 @@ const port = 3000
 
 const prisma = new PrismaClient()
 
+
+const swaggerOptions = {
+    swaggerDefinition: {
+        info: {
+            title: 'Swagger',
+            version: '1.0.0',
+            description: 'Documentation for your API',
+        },
+    },
+    // API routes and JSDoc comments go here
+    apis: ['server.js'],
+};
+const swaggerSpec = swaggerJSDoc(swaggerOptions);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
 app.use(express.json());
+
 
 function getRandomInt(max) {
     return Math.floor(Math.random() * max);
@@ -14,6 +32,15 @@ app.get('/', (req, res) => {
     res.send('Hello World!')
 })
 
+/**
+ * @swagger
+ * /background:
+ *   get:
+ *     description: get a background and treasures
+ *     responses:
+ *       200:
+ *         description: Success
+ */
 app.get('/background', async (req, res) => {
     const backgrounds = await prisma.backgroundImage.findMany()
     const number = getRandomInt(backgrounds.length - 1)

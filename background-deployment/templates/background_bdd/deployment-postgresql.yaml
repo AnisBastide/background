@@ -1,0 +1,43 @@
+{{ if .Values.deployment.backend }}
+---
+apiVersion: v1
+kind: Deployment
+metadata:
+  name: {{ .Values.env }}-postgresql-deployment
+  labels:
+    app: {{ .Values.env }}-postgresql
+spec:
+  replicas: {{ .Values.background.postgresql.replica }}
+  selector:
+    matchLabels:
+      app: {{ .Values.env }}-postgresql
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.env }}-postgresql
+    spec:
+      containers:
+        - name: {{ .Values.env }}-postgresql
+          image: {{ .Values.background.postgresql.repository }}
+          imagePullPolicy: {{ .Values.background.postgresql.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.background.postgresql.port }}
+          envFrom:
+            - secretRef:
+              name: {{ .Values.env }}-postgresql-secret
+          livenessProbe:
+            tcpSocket:
+              port: { { .Values.background.postgresql.port } }
+            initialDelaySeconds: 15
+            periodSeconds: 3
+          readinessProbe:
+            tcpSocket:
+              port: { { .Values.background.postgresql.port } }
+            initialDelaySeconds: 15
+            periodSeconds: 3
+      volumes:
+        - name: {{ .Values.env }}-postgresql-volume
+        persistentVolumeClaim:
+          claimName: {{ .Values.env }}-postgresql-pvc
+---
+{{ end }}

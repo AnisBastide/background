@@ -1,0 +1,29 @@
+{{ if .Values.deployment.frontend }}
+---
+apiVersion: v1
+kind: Deployment
+metadata:
+  name: {{ .Values.env }}-frontend-deployment
+  labels:
+    app: {{ .Values.env }}-frontend
+spec:
+  replicas: {{ .Values.background.frontend.replica }}
+  selector:
+    matchLabels:
+      app: {{ .Values.env }}-frontend
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.env }}-frontend
+    spec:
+      containers:
+        - name: {{ .Values.env }}-frontend
+          image: {{ .Values.background.frontend.repository }}
+          imagePullPolicy: {{ .Values.background.frontend.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.background.frontend.port }}
+          envFrom:
+            - configMapRef:
+              name: {{ .Values.env }}-frontend-configmap
+---
+{{ end }}
