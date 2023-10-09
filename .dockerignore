@@ -1,2 +1,6 @@
 #.dockerignore
 .env
+readme.md
+docker-compose.yml
+node_modules
+background-deployment
