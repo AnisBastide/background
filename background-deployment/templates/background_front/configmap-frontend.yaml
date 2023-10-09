@@ -5,6 +5,7 @@ kind: ConfigMap
 metadata:
   name: {{ .Values.env }}-frontend-configmap
 data:
-  BACKEND_URL: "http://{{ .Values.env }}-backend-service:{{ .Values.background.backend.externalPort }}"
+  REACT_APP_BACKEND_URL: "http://{{ .Values.route.domain }}/"
+  #REACT_APP_BACKEND_URL: "http://{{ .Values.env }}-backend-service:{{ .Values.background.backend.externalPort }}/"
 ---
 {{ end }}

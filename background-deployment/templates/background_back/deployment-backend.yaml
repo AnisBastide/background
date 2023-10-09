@@ -20,13 +20,12 @@ spec:
         - name: {{ .Values.env }}-backend
           image: {{ .Values.background.backend.image }}
           imagePullPolicy: {{ .Values.background.backend.pullPolicy }}
-          command: ["/bin/sh","-c"]
-          args: ["npx prisma generate && npm start"]
           ports:
             - containerPort: {{ .Values.background.backend.internalPort }}
           envFrom:
             - secretRef:
                 name: {{ .Values.env }}-backend-secret
-
+            - configMapRef:
+                name: {{ .Values.env }}-backend-configmap
 ---
 {{ end }}
