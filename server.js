@@ -4,6 +4,7 @@ const express = require('express')
 const {PrismaClient} = require("@prisma/client");
 const app = express()
 const port = 3000
+var morgan = require('morgan')
 
 const prisma = new PrismaClient()
 
@@ -23,6 +24,7 @@ const swaggerSpec = swaggerJSDoc(swaggerOptions);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use(express.json());
+app.use(morgan('combined'))
 
 
 function getRandomInt(max) {
