@@ -27,4 +27,4 @@ jobs:
         cache: 'npm'
     - run: npm i
     - run: npx prisma generate
-    # -run: npm test
+    - run: npm test
