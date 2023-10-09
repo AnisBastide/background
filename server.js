@@ -1,10 +1,26 @@
 const swaggerJSDoc = require('swagger-jsdoc');
+const cors = require('cors'); // Import the 'cors' middleware
 const swaggerUi = require('swagger-ui-express');
 const express = require('express')
 const { PrismaClient } = require("@prisma/client");
 const app = express()
 const port = 3000
-var morgan = require('morgan')
+var morgan = require('morgan');
+const allowedOrigins = process.env.FRONT_URL;
+const corsOptions = {
+    origin: function (origin, callback) {
+        if (allowedOrigins.includes(origin) || !origin) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
+    optionsSuccessStatus: 204,
+};
+
+app.use(cors(corsOptions));
 
 const prisma = new PrismaClient()
 
