@@ -1,10 +1,10 @@
-{{ if .Values.deployment.frontend }}
+{{ if .Values.background.frontend.enabled }}
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ .Values.env }}-frontend-configmap
 data:
-  APIBASEURL: "http://{{ .Values.env }}-backend-service:8080/"
+  BACKEND_URL: "http://{{ .Values.env }}-backend-service:{{ .Values.background.backend.externalPort }}"
 ---
 {{ end }}

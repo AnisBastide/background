@@ -1,4 +1,4 @@
-{{ if .Values.deployment.backend }}
+{{ if .Values.background.backend.enabled }}
 ---
 apiVersion: v1
 kind: Service
@@ -11,7 +11,7 @@ spec:
     app: {{ .Values.env }}-postgresql
   ports:
       - protocol: TCP
-        port: {{ .Values.background.postgresql.port }}
-        targetPort: 5432
+        port: {{ .Values.background.postgresql.externalPort }}
+        targetPort: {{ .Values.background.postgresql.internalPort }}
 ---
 {{ end }}

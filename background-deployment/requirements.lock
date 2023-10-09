@@ -1,0 +1,6 @@
+dependencies:
+- name: adminer
+  repository: https://mogaal.github.io/helm-charts/
+  version: 0.2.1
+digest: sha256:b0b75df96d29f5699e19096dcb904666408a94b08e30083bf94a3bc789890ae1
+generated: "2023-10-09T14:12:45.474492+02:00"

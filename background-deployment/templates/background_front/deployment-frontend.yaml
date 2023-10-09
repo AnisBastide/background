@@ -1,6 +1,6 @@
-{{ if .Values.deployment.frontend }}
+{{ if .Values.background.frontend.enabled }}
 ---
-apiVersion: v1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ .Values.env }}-frontend-deployment
@@ -18,12 +18,12 @@ spec:
     spec:
       containers:
         - name: {{ .Values.env }}-frontend
-          image: {{ .Values.background.frontend.repository }}
+          image: {{ .Values.background.frontend.image }}
           imagePullPolicy: {{ .Values.background.frontend.pullPolicy }}
           ports:
-            - containerPort: {{ .Values.background.frontend.port }}
+            - containerPort: {{ .Values.background.frontend.internalPort }}
           envFrom:
             - configMapRef:
-              name: {{ .Values.env }}-frontend-configmap
+                name: {{ .Values.env }}-frontend-configmap
 ---
 {{ end }}

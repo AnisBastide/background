@@ -1,28 +1,31 @@
 env: dev
 
-deployment:
-  frontend: false
-  backend: true
-
 background:
   frontend:
-    image: anisbastide/background_front
+    enabled: true
+    image: lucasdsm78/background-front:latest
     pullPolicy: Always
-    port: 80
+    internalPort: 3000
+    externalPort: 8080
     replica: 1
   backend:
-    image: anisbastide/background_front
+    enabled: true
+    image: anisbastide/background_back:latest
     pullPolicy: Always
-    port: 3000
-    replica: 3
+    internalPort: 3000
+    externalPort: 3000
+    replica: 1
   postgresql:
     image: postgres:16-alpine
     pullPolicy: Always
     storage: 512Mi
-    port: 5432
+    internalPort: 5432
+    externalPort: 5432
     replica: 1
+  ingress:
+    enabled: false
 
 route:
-  domain: domain.name.temp.fr
+  domain: "leaddev.digitalseeder.com"
 
 imagePullSecrets: []

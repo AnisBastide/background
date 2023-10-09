@@ -1,6 +1,6 @@
-{{ if .Values.deployment.backend }}
+{{ if .Values.background.backend.enabled }}
 ---
-apiVersion: v1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ .Values.env }}-backend-deployment
@@ -16,19 +16,17 @@ spec:
       labels:
         app: {{ .Values.env }}-backend
     spec:
-      initContainers:
-        - name: {{ .Values.env }}-wait-bdd
-          image: appropriate/curl:latest
-          command: [ 'sh', '-c', 'until curl -s http://{{ .Values.env }}-postgresql-service:5432; waiting for database OK response ...; sleep 2; done;' ]
       containers:
         - name: {{ .Values.env }}-backend
-          image: {{ .Values.background.backend.repository }}
+          image: {{ .Values.background.backend.image }}
           imagePullPolicy: {{ .Values.background.backend.pullPolicy }}
+          command: ["/bin/sh","-c"]
+          args: ["npx prisma generate && npm start"]
           ports:
-            - containerPort: {{ .Values.background.backend.port }}
+            - containerPort: {{ .Values.background.backend.internalPort }}
           envFrom:
             - secretRef:
-              name: {{ .Values.env }}-postgresql-secret
+                name: {{ .Values.env }}-backend-secret
 
 ---
 {{ end }}

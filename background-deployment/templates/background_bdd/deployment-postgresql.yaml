@@ -1,6 +1,6 @@
-{{ if .Values.deployment.backend }}
+{{ if .Values.background.backend.enabled }}
 ---
-apiVersion: v1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ .Values.env }}-postgresql-deployment
@@ -18,26 +18,26 @@ spec:
     spec:
       containers:
         - name: {{ .Values.env }}-postgresql
-          image: {{ .Values.background.postgresql.repository }}
+          image: {{ .Values.background.postgresql.image }}
           imagePullPolicy: {{ .Values.background.postgresql.pullPolicy }}
           ports:
-            - containerPort: {{ .Values.background.postgresql.port }}
+            - containerPort: {{ .Values.background.postgresql.internalPort }}
           envFrom:
             - secretRef:
-              name: {{ .Values.env }}-postgresql-secret
+                name: {{ .Values.env }}-postgresql-secret
           livenessProbe:
             tcpSocket:
-              port: { { .Values.background.postgresql.port } }
+              port: {{ .Values.background.postgresql.internalPort }}
             initialDelaySeconds: 15
             periodSeconds: 3
           readinessProbe:
             tcpSocket:
-              port: { { .Values.background.postgresql.port } }
+              port: {{ .Values.background.postgresql.internalPort }}
             initialDelaySeconds: 15
             periodSeconds: 3
       volumes:
         - name: {{ .Values.env }}-postgresql-volume
-        persistentVolumeClaim:
-          claimName: {{ .Values.env }}-postgresql-pvc
+          persistentVolumeClaim:
+            claimName: {{ .Values.env }}-postgresql-pvc
 ---
 {{ end }}

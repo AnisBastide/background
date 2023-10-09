@@ -1,4 +1,4 @@
-{{ if .Values.deployment.frontend }}
+{{ if .Values.background.frontend.enabled }}
 ---
 apiVersion: v1
 kind: Service
@@ -7,11 +7,12 @@ metadata:
     app: {{ .Values.env }}-frontend
   name: {{ .Values.env }}-frontend-service
 spec:
+  type: LoadBalancer
   selector:
     app: {{ .Values.env }}-frontend
   ports:
     - protocol: TCP
-      port: {{ .Values.background.frontend.port }}
-      targetPort: 8080
+      port: {{ .Values.background.frontend.externalPort }}
+      targetPort: {{ .Values.background.frontend.internalPort }}
 ---
 {{ end }}

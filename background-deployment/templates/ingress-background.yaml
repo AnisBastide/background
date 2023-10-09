@@ -1,0 +1,34 @@
+{{ if .Values.background.ingress.enabled }}
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: background-ingress
+spec:
+  rules:
+  {{ if .Values.background.backend.enabled }}
+    - host: {{ .Values.route.domain }}
+      http:
+        paths:
+          - path: /api/
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ .Values.env }}-backend-service
+                port:
+                  number: {{ .Values.background.backend.externalPort }}
+  {{ end }}
+  {{ if .Values.background.frontend.enabled }}
+    - host: {{ .Values.route.domain }}
+      http:
+        paths:
+          - path: /background/
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ .Values.env }}-frontend-service
+                port:
+                  number: {{ .Values.background.frontend.externalPort }}
+  {{ end }}
+---
+{{ end }}

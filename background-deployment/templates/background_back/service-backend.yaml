@@ -1,4 +1,4 @@
-{{ if .Values.deployment.backend }}
+{{ if .Values.background.backend.enabled }}
 ---
 apiVersion: v1
 kind: Service
@@ -7,12 +7,12 @@ metadata:
     app: {{ .Values.env }}-backend
   name: {{ .Values.env }}-backend-service
 spec:
+  type: LoadBalancer
   selector:
     app: {{ .Values.env }}-backend
   ports:
     - protocol: TCP
-      port: {{ .Values.background.backend.port }}
-      targetPort: 8080
-  type: LoadBalancer
+      port: {{ .Values.background.backend.externalPort }}
+      targetPort: {{ .Values.background.backend.internalPort }}
 ---
 {{ end }}
