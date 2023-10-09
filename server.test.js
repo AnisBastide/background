@@ -1,12 +1,13 @@
 const request = require('supertest');
 const express = require('express');
 const server = require('./server.js');
+const expect = require("expect");
 
 const app = express();
 
 describe('Test de la route /background', () => {
     it('devrait renvoyer des informations valides', async () => {
-        const response = await request(app).get('/background');
+        const response = request(app).get('/background');
 
         expect(response.status).toBe(200);
         expect(response.body).toHaveProperty('map');
