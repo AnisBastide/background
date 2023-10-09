@@ -73,6 +73,26 @@ app.get('/background', async (req, res) => {
     res.send(response)
 });
 
+app.get('/backgrounds', async (req, res) => {
+    try {
+        const backgrounds = await prisma.backgroundImage.findMany();
+        res.json(backgrounds);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Une erreur s\'est produite lors de la récupération des backgrounds.' });
+    }
+});
+
+app.get('/treasures', async (req, res) => {
+    try {
+        const treasures = await prisma.treasures.findMany();
+        res.json(treasures);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Une erreur s\'est produite lors de la récupération des treasures.' });
+    }
+});
+
 app.post('/background', async (req, res) => {
     try {
         console.log(req.body);
@@ -127,6 +147,33 @@ app.delete('/background/:id', async (req, res) => {
         }
 
         await prisma.backgroundImage.delete({
+            where: {
+                id: parseInt(id),
+            },
+        });
+
+        res.status(204).send();
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Une erreur est survenue lors de la suppression du background image.' });
+    }
+});
+
+app.delete('/treasure/:id', async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const treasure = await prisma.treasures.findUnique({
+            where: {
+                id: parseInt(id),
+            },
+        });
+
+        if (!treasure) {
+            return res.status(404).json({ error: 'Treasure non trouvé.' });
+        }
+
+        await prisma.treasures.delete({
             where: {
                 id: parseInt(id),
             },
