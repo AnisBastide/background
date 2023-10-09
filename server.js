@@ -98,7 +98,6 @@ app.post('/treasure', async (req, res) => {
 
 app.delete('/background/:id', async (req, res) => {
     const { id } = req.params;
-
     try {
         const background = await prisma.backgroundImage.findUnique({
             where: {
